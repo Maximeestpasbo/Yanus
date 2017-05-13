@@ -1,11 +1,19 @@
 package View;
 import Model.GameObject;
+import Model.mBomber;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
+
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Toolkit;
+
 
 public class Map extends JPanel {
 	private ArrayList<GameObject> objects;
@@ -15,7 +23,9 @@ public class Map extends JPanel {
 		this.requestFocusInWindow();
 	}
 	
-	public void paint(Graphics g) { 
+	 public void paint(Graphics g) { 
+		 synchronized(objects){
+			 doDrawing(g);
 		for(int i = 0; i<35; i++){							// Vire la valeur 20 et parametrer ca
 			for(int j = 0; j<20; j++){
 				int x = i;
@@ -27,7 +37,9 @@ public class Map extends JPanel {
 			}
 		}
 		
-		for(GameObject object : this.objects){
+		//for(GameObject object : this.objects){
+		for(int i =0; i <objects.size(); i++ ){
+			GameObject object = objects.get(i);
 			int x = object.getPosX();
 			int y = object.getPosY();
 			int color = object.getColor();			
@@ -58,12 +70,22 @@ public class Map extends JPanel {
 				g.setColor(Color.BLUE);
 				g.fillRect(x*50, y*50-50, 48, 148);
 			}
-		}
+		}}
 	}
 	
 	public void setObjects(ArrayList<GameObject> objects){
 		this.objects = objects;
 	}
+	
+	
+    private void doDrawing(Graphics g) {
+    	for(int i = 0; i<objects.size(); i++){
+    		GameObject object = objects.get(i);
+        if (object instanceof mBomber){
+        	mBomber go = (mBomber) object;
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.drawImage(go.getImage(), go.getX(), go.getY(), this);        
+    }}}
 	
 	public void redraw(){
 		this.repaint();

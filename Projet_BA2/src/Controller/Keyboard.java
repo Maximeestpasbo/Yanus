@@ -45,7 +45,7 @@ public class Keyboard implements KeyListener{
 				game.dropBomb("nuke", player1);
 				break;
 			case KeyEvent.VK_B:
-				game.dropBomb("bomb", player1);
+				game.movePlayer(1,0, player2);
 				
 			case KeyEvent.VK_A:
 				game.useWeapon(player1);
