@@ -28,12 +28,9 @@ public abstract class Living extends GameObject implements Demisable {
 	
 	}
 
-	private void setLp(int newLp) {
+	protected void setLp(int newLp) {
 		this.lp = newLp;
-		if(lp <= 0){
-			demisableNotifyObserver();
-		}
-
+		
 		
 	}
 

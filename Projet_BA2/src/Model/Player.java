@@ -24,8 +24,8 @@ public class Player extends Living implements DemisableObserver, ExplodableObser
 	public void move(int X, int Y){
 		super.posX = this.posX + X;
 		super.posY = this.posY + Y;
-		this.directionX= this.posX+X;
-		this.directionY = this.posY+Y;
+		this.directionX= this.posX+(X%2);
+		this.directionY = this.posY+(Y%2);
 	}
 	
 
@@ -98,5 +98,24 @@ public class Player extends Living implements DemisableObserver, ExplodableObser
 	@Override
 	public boolean isObstacle() {
 		return false;
+	}
+
+	public void setPosX(int i) {
+		this.posX = i;
+		
+	}
+	public void setPosY(int i) {
+		this.posY = i;
+		
+	}
+
+	public void setDirectionX(int x) {
+		this.directionX= this.posX+(x%2);
+		
+		
+	}
+	public void setDirectionY(int y) {
+		this.directionY = this.posY+(y%2);
+		
 	}
 }

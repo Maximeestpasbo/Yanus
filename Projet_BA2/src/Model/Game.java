@@ -13,9 +13,10 @@ public class Game implements Disappear{//implements DemisableObserver{
 	private int sizeX = 35;
 	private int sizeY = 20;
 	private int bombTimer = 3000;
-	private int numberOfBreakableBlocks = 90;
-	private int numberOfmBomber = 1;
+	private int numberOfBreakableBlocks = 10;
+	private int numberOfmBomber = 2;
 	private int numberOfmMicrobe = 0;
+	private int level = 0;
 	
 	public Game(Window window){
 		this.window = window;
@@ -26,62 +27,73 @@ public class Game implements Disappear{//implements DemisableObserver{
 
 		weapons.add(new Hammer(1,4));
 
-
+		this.mapInit(level);
 		
 		
-		//monster building
-		Random rand1 = new Random();
-		for(int i = 0; i < numberOfmBomber; i++){
-			int x = rand1.nextInt(31) + 2;
-			int y = rand1.nextInt(16) +2;
-			mBomber Monster = new mBomber(x,y,this,2);
-			//\\Monster.demisableAttach(this);
-			objects.add(Monster);
-		}
-		for(int i = 0; i < numberOfmMicrobe; i++){
-			int x = rand1.nextInt(31) + 2;
-			int y = rand1.nextInt(16) +2;
-			mMicrobe Monster = new mMicrobe(x,y,this,1);
-			//\\Monster.demisableAttach(this);
-			objects.add(Monster);
-		}
-		
-
-	
-		// Map building 
-		
-		for(int i = 0; i < sizeX; i++){
-			objects.add(new BlockUnbreakable(i,0));
-			objects.add(new BlockUnbreakable(i, sizeY-1));
-		}
-		for(int i = 0; i < sizeY; i++){
-			objects.add(new BlockUnbreakable(0,i));
-			objects.add(new BlockUnbreakable(sizeX-1, i));
-		}
-		Random rand = new Random();
-		for(int i = 0; i < numberOfBreakableBlocks; i++){
-			int x = rand.nextInt(31) + 2;
-			int y = rand.nextInt(16) +2;
-			BlockBreakable block = new BlockBreakable(x,y);
-			//\\block.demisableAttach(this);
-			objects.add(block);
-		}
-		
-		Item item = new iSlow(17,10,2,this, 10, 5, 0,1000,5);
-		//\\item.demisableAttach(this);
-		objects.add(item);
-		//item de départ
-		for (int i =0; i < 6; i++){
-		//Item item = new Item(20+i,10,2,this);
-		//item.demisableAttach(this);
-		//objects.add(item); 
-		}
-		
-		
-		window.setGameObjects(this.getGameObjects());
-		notifyView();
 	}
 
+	
+	
+	public void mapInit(int level){
+		//monster building
+				Random rand1 = new Random();
+				for(int i = 0; i < numberOfmBomber; i++){
+					int x = rand1.nextInt(31) + 2;
+					int y = rand1.nextInt(16) +2;
+					mBomber Monster = new mBomber(x,y,this,2);
+					//\\Monster.demisableAttach(this);
+					objects.add(Monster);
+				}
+				for(int i = 0; i < numberOfmMicrobe; i++){
+					int x = rand1.nextInt(31) + 2;
+					int y = rand1.nextInt(16) +2;
+					mMicrobe Monster = new mMicrobe(x,y,this,1);
+					//\\Monster.demisableAttach(this);
+					objects.add(Monster);
+				}
+				
+
+			
+				// Map building 
+				
+				for(int i = 0; i < sizeX; i++){
+					objects.add(new BlockUnbreakable(i,0));
+					objects.add(new BlockUnbreakable(i, sizeY-1));
+				}
+				for(int i = 0; i < sizeY; i++){
+					objects.add(new BlockUnbreakable(0,i));
+					objects.add(new BlockUnbreakable(sizeX-1, i));
+				}
+				Random rand = new Random();
+				for(int i = 0; i < numberOfBreakableBlocks; i++){
+					int x = rand.nextInt(31) + 2;
+					int y = rand.nextInt(16) +2;
+					BlockBreakable block = new BlockBreakable(x,y);
+					//\\block.demisableAttach(this);
+					objects.add(block);
+				}
+				
+				Item item = new iSlow(17,10,2,this, 10, 5, 0,1000,5);
+				//\\item.demisableAttach(this);
+				objects.add(item);
+				//item de départ
+				for (int i =0; i < 6; i++){
+				//Item item = new Item(20+i,10,2,this);
+				//item.demisableAttach(this);
+				//objects.add(item); 
+				}
+				
+				
+				window.setGameObjects(this.getGameObjects());
+				notifyView();
+				}
+	
+	
+	
+	
+	
+	
+	
 
 	
 
@@ -110,23 +122,47 @@ public class Game implements Disappear{//implements DemisableObserver{
 	
 	public void movePlayer(int x, int y, int playerNumber){
 		Player player = ((Player) objects.get(playerNumber));
+		GameObject go = ((Player) objects.get(playerNumber));
 		int nextX = player.getPosX()+x;
 		int nextY = player.getPosY()+y;
+		int nextx = go.getPosX()+x;
+		int nexty = go.getPosY()+y;
+		player.setDirectionX(x);
+		player.setDirectionY(y);
 		
 		
 		boolean obstacle = false;
+		try{
 		for(GameObject object : objects){
+			
+			if(object.isAtPosition(nextX, nextY)){
+			
+				if (object instanceof Portal){
+					Portal portal = (Portal) object;
+			
+					portal.newLevel(objects);
+					this.level += 1;
+					this.mapInit(level);
+			
+			}}
+			
+		
 			if(object.isAtPosition(nextX, nextY)){
 				obstacle = object.isObstacle();
 			}
 			if(obstacle == true){
 				break;
-			}
-		}
+			}/////////////////////
 		
+		}
+
 		if(obstacle == false){
 			player.move(x,y);
 			notifyView();
+		}
+		}
+		catch(Exception e){
+			e.printStackTrace();
 		}
 	}
 
@@ -134,7 +170,7 @@ public class Game implements Disappear{//implements DemisableObserver{
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// MONSTER
 	
-	public void moveMonster(Monster one, int mVision){
+	synchronized public void moveMonster(Monster one, int mVision){
 		
 
 
@@ -286,15 +322,20 @@ public class Game implements Disappear{//implements DemisableObserver{
 	}
 	
 	public void addObjects(GameObject one){
+		//synchronized (objects){
 		objects.add(one);
-		if (one instanceof Item){
-		Item two = (Item) one;
+		window.setGameObjects(this.getGameObjects());
+		//if (one instanceof Item){
+		//Item two = (Item) one;
 		//\\two.demisableAttach(this);
-	}
+	//}}
 	}
 	
 	public void removeObject(GameObject one){
+		//synchronized (objects){
 		objects.remove(one);
+		window.setGameObjects(this.getGameObjects());
+		//}
 	}
 	
 
@@ -306,7 +347,9 @@ public class Game implements Disappear{//implements DemisableObserver{
 		int y = player.getDirectionY();
 		int degats = weapon.getDegats();
 		Animation animation = new Animation(9,x,y,2,this,0,0);
-		for (GameObject object : objects){
+		//for (GameObject object : objects){
+		for(int i =0; i <objects.size(); i++ ){
+			GameObject object = objects.get(i);
 			if (object instanceof Living){
 				if (weapon.checkPos( x,  y, object)){
 					
@@ -364,9 +407,13 @@ public class Game implements Disappear{//implements DemisableObserver{
 		int x = trap.getPosX();
 		int y = trap.getPosY();
 		int degats = trap.getDegats();
-		for (GameObject object : objects){
-			if( trap.checkPos(x,y,object)){
-				if (object instanceof Living){
+		//for (GameObject object : objects){
+		for(int i =0; i <objects.size(); i++ ){
+			GameObject object = objects.get(i);
+			if (object instanceof Living){
+				System.out.println(objects.size());
+				if( trap.checkPos(x,y,object)){
+				
 					Living living = (Living) object;
 					trap.damage(living,degats);
 				}
@@ -394,6 +441,12 @@ public class Game implements Disappear{//implements DemisableObserver{
 		return this.weapons;
 	}
 	
+	public int getSizeX(){
+		return this.sizeX;
+	}
+	public int getSizeY(){
+		return this.sizeY;
+	}
 	
 		
 	@Override

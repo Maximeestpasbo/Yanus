@@ -13,10 +13,10 @@ public class Viewer implements Runnable{
 	
 	///////////////////////////////// NE FONCTIONNE PAS  (????)
 	
-	public void run(){
+	synchronized public void run(){
 		while(true){
 			try {
-				Thread.sleep(50);
+				Thread.sleep(100);
 			window.update();
 				}
 				

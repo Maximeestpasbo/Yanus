@@ -54,8 +54,13 @@ public abstract class Monster extends Living implements Runnable, DemisableObser
 		
 
 
+	@Override
+	public void Hit(int degats){
+		int newLp = this.getLp()-degats;
+		this.setLp(newLp);
+		
 	
-
+	}
 	
 	
 	
@@ -102,6 +107,8 @@ this.Hit(1);
 
 //}
 }
+
+
 
 
 @Override

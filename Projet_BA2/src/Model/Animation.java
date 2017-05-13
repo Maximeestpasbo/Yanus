@@ -9,14 +9,17 @@ public class Animation extends GameObject implements Runnable{
 		super(x,y,color);
 		this.count = count;
 		this.game = game;
-		for (int i = x-rangeX; i <= x+rangeX; i++){
-			for(int j = y-rangeY; j <= y+rangeY; j++){
+		//for (int i = x-rangeX; i <= x+rangeX; i++){
+			//for(int j = y-rangeY; j <= y+rangeY; j++){
+				//this.posX = x+i;
+				//System.out.println(this.getPosX());
 				Thread thread = new Thread(this);
 				thread.start();
-	}}}
+	}//}//}
 	
 	@Override
-	public void run(){
+	 public void run(){
+		//synchronized(this){ 
 		game.addObjects(this);
 
 		while(count > 0){
@@ -29,7 +32,7 @@ public class Animation extends GameObject implements Runnable{
 			}
 	}
 		game.removeObject(this);
-		}
+		}//}
 	
 	@Override
 	public boolean isObstacle(){

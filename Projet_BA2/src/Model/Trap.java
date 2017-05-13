@@ -37,4 +37,12 @@ public class Trap extends Item implements CheckPos, Damage {
 	public int getDegats(){
 		return this.degats;
 	}
+	
+	public int getRangeX(){
+		return this.rangeX;
+	}
+	
+	public int getRangeY(){
+		return this.rangeY;
+	}
 }

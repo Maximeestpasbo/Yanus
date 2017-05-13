@@ -14,23 +14,29 @@ public class Bombs extends Trap implements Runnable{
 	
 	@Override
 	public void run(){
-		
+		//synchronized(this){ 
 		game.addObjects(this);
-		while(count < 10  ){
+		while(this.count < 10  ){
 			try {
 				Thread.sleep(100);
-				count += 1;
+				this.count += 1;
+				
+				
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}}
 		game.trapTime(this);
-		Animation animation = new Animation (9,super.posX,super.posY,2,game,2,2);
+		for (int i = this.posX-rangeX; i <= this.posX+rangeX; i++){
+			for(int j = this.posY-rangeY; j <= this.posY+rangeY; j++){
+				System.out.println("trap");
+				//Animation animation = new Animation (3,i,j,3,game,2,2);
+			}}
 		game.removeObject(this);
-	}
+	}}
 	
 
 
 
 		
-	}
+	//}
 
