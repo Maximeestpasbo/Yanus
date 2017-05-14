@@ -26,7 +26,6 @@ public abstract class Item extends GameObject {
 	}
 	
 	public void del (ArrayList objects, int playerNumber){
-		//objects.add(this);                 ///////\\\\\\\\ changer les ajouts de game par ceux de objects et utiliser les get/set
 		if (playerNumber==0){
 		game.removeInventaireCombat(this);
 		}
