@@ -47,6 +47,22 @@ private static int y;
 				e.printStackTrace();
 			}
 			} 
+		game.removeObject(this);
+		if(this.getLp() <= 0){
+			boolean test = true;
+			for (int i = 0; i< game.getGameObjects().size(); i++){
+				GameObject object = game.getGameObjects().get(i);
+				if (object instanceof Monster){
+					test = false;
+					
+				}
+			}
+			if (test){
+				
+				Portal portal = new Portal(game.getSizeX(), game.getSizeY());
+				game.addObjects(portal);
+		}
+		}
 		}	
 
 

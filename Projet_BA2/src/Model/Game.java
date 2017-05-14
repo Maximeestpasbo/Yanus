@@ -1,31 +1,34 @@
 package Model;
 import View.Window;
+import View.WindowInventaire;
+import View.Inventaire;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Game implements Disappear{//implements DemisableObserver{
+public class Game {
 	private ArrayList<GameObject> objects = new ArrayList<GameObject>();
 	private ArrayList<GameObject> inventaireCombat = new ArrayList<GameObject>();
+	private ArrayList<GameObject> inventaireCombat2 = new ArrayList<GameObject>();
 	private ArrayList<Weapon> weapons = new ArrayList<Weapon>();
 	
 	private Window window;
 	private int sizeX = 35;
 	private int sizeY = 20;
-	private int bombTimer = 3000;
-	private int numberOfBreakableBlocks = 10;
-	private int numberOfmBomber = 2;
-	private int numberOfmMicrobe = 0;
+	private int numberOfBreakableBlocks = 50;
+	private int numberOfmBomber = 3;
+	private int numberOfmMicrobe = 3;
 	private int level = 0;
 	
 	public Game(Window window){
 		this.window = window;
 
 		// Creating one Player at position (1,1)
-		objects.add(new Player(10,10,3,1));
-		objects.add(new Player(15,10,3,5));
+		objects.add(new Player(10,10,5,6,this.objects));
+		objects.add(new Player(15,10,5,6,this.objects));
 
-		weapons.add(new Hammer(1,4));
+		weapons.add(new Hammer(10,10,20,this,1,4));
+		weapons.add(new Dague(15,10,6,1,this,1,10));
 
 		this.mapInit(level);
 		
@@ -34,60 +37,68 @@ public class Game implements Disappear{//implements DemisableObserver{
 
 	
 	
-	public void mapInit(int level){
-		//monster building
-				Random rand1 = new Random();
-				for(int i = 0; i < numberOfmBomber; i++){
-					int x = rand1.nextInt(31) + 2;
-					int y = rand1.nextInt(16) +2;
-					mBomber Monster = new mBomber(x,y,this,2);
-					//\\Monster.demisableAttach(this);
-					objects.add(Monster);
-				}
-				for(int i = 0; i < numberOfmMicrobe; i++){
-					int x = rand1.nextInt(31) + 2;
-					int y = rand1.nextInt(16) +2;
-					mMicrobe Monster = new mMicrobe(x,y,this,1);
-					//\\Monster.demisableAttach(this);
-					objects.add(Monster);
-				}
-				
 
-			
-				// Map building 
-				
-				for(int i = 0; i < sizeX; i++){
-					objects.add(new BlockUnbreakable(i,0));
-					objects.add(new BlockUnbreakable(i, sizeY-1));
-				}
-				for(int i = 0; i < sizeY; i++){
-					objects.add(new BlockUnbreakable(0,i));
-					objects.add(new BlockUnbreakable(sizeX-1, i));
-				}
-				Random rand = new Random();
-				for(int i = 0; i < numberOfBreakableBlocks; i++){
-					int x = rand.nextInt(31) + 2;
-					int y = rand.nextInt(16) +2;
-					BlockBreakable block = new BlockBreakable(x,y);
-					//\\block.demisableAttach(this);
-					objects.add(block);
-				}
-				
-				Item item = new iSlow(17,10,2,this, 10, 5, 0,1000,5);
-				//\\item.demisableAttach(this);
-				objects.add(item);
-				//item de départ
-				for (int i =0; i < 6; i++){
-				//Item item = new Item(20+i,10,2,this);
-				//item.demisableAttach(this);
-				//objects.add(item); 
-				}
-				
-				
-				window.setGameObjects(this.getGameObjects());
-				notifyView();
-				}
-	
+	 	public void mapInit(int level){
+	 		
+	 		
+	 
+
+	 		//monster building
+	 
+	 		
+	 		Random rand1 = new Random();
+	 		for(int i = 0; i < numberOfmBomber; i++){
+	 			int x = rand1.nextInt(30) + 2;
+	 			int y = rand1.nextInt(15) +2;
+	 			mBomber Monster = new mBomber(x,y,this,2,1,0);
+	 			//\\Monster.demisableAttach(this);
+	 			objects.add(Monster);
+	 		}
+	 		for(int i = 0; i < numberOfmMicrobe; i++){
+	 			int x = rand1.nextInt(30) + 2;
+	 			int y = rand1.nextInt(15) +2;
+	 			mMicrobe Monster = new mMicrobe(x,y,this,1);
+	 			//\\Monster.demisableAttach(this);
+	 			objects.add(Monster);
+	 		}
+	 		
+	 
+	 
+	 		// Map building 
+	 		
+	 		for(int i = 0; i < sizeX; i++){
+	 			objects.add(new BlockUnbreakable(i,0));
+	 			objects.add(new BlockUnbreakable(i, sizeY-1));
+	 		}
+	 	for(int i = 0; i < sizeY; i++){
+	 			objects.add(new BlockUnbreakable(0,i));
+	 			objects.add(new BlockUnbreakable(sizeX-1, i));
+	 		}
+	 		Random rand = new Random();
+	 		for(int i = 0; i < numberOfBreakableBlocks; i++){
+	 			int x = rand.nextInt(30) + 2;
+	 			int y = rand.nextInt(15) +2;
+	 			BlockBreakable block = new BlockBreakable(x,y);
+	 			//\\block.demisableAttach(this);
+	 			objects.add(block);
+	 		}
+	 		
+	 		Item item = new Potion(17,10,2,this,7,5);
+	 		//\\item.demisableAttach(this);
+	 		objects.add(item);
+	 		//item de dpart
+	 		for (int i =0; i < 6; i++){
+	 		//Item item = new Item(20+i,10,2,this);
+	 		//item.demisableAttach(this);
+	 		//objects.add(item); 
+	 		}
+	 		
+	 		
+	 		window.setGameObjects(this.getGameObjects());
+	 		notifyView();
+	 	
+	 	level+=1;
+	 	}
 	
 	
 	
@@ -102,23 +113,7 @@ public class Game implements Disappear{//implements DemisableObserver{
 	// PLAYER
 	
 	
-	public void dropBomb(String bombType, int playerNumber){
-		Player player = ((Player) objects.get(playerNumber));
-		BombObject bombDropped = player.dropBomb(bombType);
-		if(bombDropped != null){
-			//\\bombDropped.demisableAttach(this);
-			for(GameObject object : objects){
-				if(object instanceof Explodable  && !(object instanceof iSlow)){
-					((BombObject) object).explodableAttach(((ExplodableObserver) bombDropped));
-				}
-				if(object instanceof ExplodableObserver && !(object instanceof iSlow)){
-					bombDropped.explodableAttach(((ExplodableObserver) object));  //enlève les objets touchés par l'explosion
-				}
-			}
-			objects.add(bombDropped);
-			notifyView();
-		}
-	}
+
 	
 	public void movePlayer(int x, int y, int playerNumber){
 		Player player = ((Player) objects.get(playerNumber));
@@ -133,12 +128,14 @@ public class Game implements Disappear{//implements DemisableObserver{
 		
 		boolean obstacle = false;
 		try{
-		for(GameObject object : objects){
+			for (int i = 0; i<objects.size(); i++){
+				GameObject object = objects.get(i);
 			
 			if(object.isAtPosition(nextX, nextY)){
 			
 				if (object instanceof Portal){
 					Portal portal = (Portal) object;
+					//WindowInventaire wInventaire = new WindowInventaire(this);
 			
 					portal.newLevel(objects);
 					this.level += 1;
@@ -158,7 +155,7 @@ public class Game implements Disappear{//implements DemisableObserver{
 
 		if(obstacle == false){
 			player.move(x,y);
-			notifyView();
+			
 		}
 		}
 		catch(Exception e){
@@ -177,10 +174,20 @@ public class Game implements Disappear{//implements DemisableObserver{
 
 		int nextX = one.getPosX()+one.getX();
 		int nextY = one.getPosY()+one.getY();
-		
+		//try{
 		boolean obstacle = false;
-		for(GameObject object : objects){
+		for (int i = 0; i<objects.size(); i++){
+			
+			if(i> objects.size()){
+			//	throw new IndexOutOfBoundsException("Objects out of Bounds.");
+			}
+			GameObject object = objects.get(i);
 			if(object.isAtPosition(nextX, nextY)){
+				if(object instanceof Player){
+					Player player = (Player) object;
+					player.Hit(1);
+					break;
+				}
 				obstacle = object.isObstacle();
 			}
 			if(obstacle == true){
@@ -192,15 +199,15 @@ public class Game implements Disappear{//implements DemisableObserver{
 					one.setX(-one.getX());
 					moveMonster(one,mVision);
 					
-					
-				}
-			}
-		}
+					}
+				}}
 		
 		if(obstacle == false){
 			one.move(one.getX(),one.getY());
 			
-		} }
+		}//}
+		//catch(Exception)
+		}
 	
 	
 	
@@ -210,7 +217,8 @@ public class Game implements Disappear{//implements DemisableObserver{
 		int x = one.getPosX() +1;// ((rand1.nextInt(2))*2-1);
 		int y = one.getPosY();
 		boolean obstacle = false;
-		for(GameObject object : objects){
+		for (int i = 0; i<objects.size(); i++){
+			GameObject object = objects.get(i);
 			if(object.isAtPosition(x, y)){
 				obstacle = object.isObstacle();
 			}
@@ -219,32 +227,16 @@ public class Game implements Disappear{//implements DemisableObserver{
 			}}
 		
 			if(obstacle == false){
-				mBomber Monster = new mBomber(x,y,this,1);
+				mBomber Monster = new mBomber(x,y,this,1,1,0);
 				//\\	Monster.demisableAttach(this);
 				objects.add(Monster);
-			} notifyView();
+			} 
 			
 	}
 	
 
 	
-	public void monsterDropBomb(String bombType, Monster one){
-		mBomber monster = (mBomber) one;
 
-		BombObject bombDropped = monster.dropBomb(bombType);
-		if(bombDropped != null){
-			//bombDropped.demisableAttach(this);
-			disappear(bombDropped);
-			for(GameObject object : objects){
-				if(object instanceof Explodable && !(object instanceof iSlow)){
-					((BombObject) object).explodableAttach(((ExplodableObserver) bombDropped));
-				}
-				if(object instanceof ExplodableObserver && !(object instanceof iSlow)){
-					bombDropped.explodableAttach(((ExplodableObserver) object));
-				}
-			}
-			objects.add(bombDropped);  //affiche la bombe
-		}}
 
 
 	
@@ -263,7 +255,8 @@ public class Game implements Disappear{//implements DemisableObserver{
 		int x = one.getPosX();  // pose objet là où était le mosntre
 		int y = one.getPosY();
 		boolean obstacle = false;
-		for(GameObject object : objects){
+		for (int i = 0; i<objects.size(); i++){
+			GameObject object = objects.get(i);
 			if(object.isAtPosition(x, y)){
 				obstacle = object.isObstacle();
 			}
@@ -272,10 +265,10 @@ public class Game implements Disappear{//implements DemisableObserver{
 			}}
 		
 			if(obstacle == false){
-				Item item = new iSlow(x,y,3,this, 10000, 5, 0,200,5);
+				Item item = new Potion(x,y,2,this,10, 3);
 				//\\item.demisableAttach(this);
 				objects.add(item);
-			} notifyView();
+			} 
 			
 	}
 	
@@ -283,42 +276,85 @@ public class Game implements Disappear{//implements DemisableObserver{
 		Player player = ((Player) objects.get(playerNumber));
 		int posX = player.getPosX();
 		int posY = player.getPosY();
-		for (GameObject object : objects){
+		if(playerNumber==0){
+		for (int i =0; i < objects.size(); i++){
+			GameObject object = objects.get(i);
 			if ((object.getPosX() == posX && object.getPosY() == posY) && object instanceof Item){
 				Item item = (Item) object;
 				if (inventaireCombat.size() < player.getPlaceInventaire())
-				item.take();
+				item.take(playerNumber);
 			}
 			}}
+		else{
+
+			for (int i =0; i < objects.size(); i++){
+				GameObject object = objects.get(i);
+				if ((object.getPosX() == posX && object.getPosY() == posY) && object instanceof Item){
+					Item item = (Item) object;
+					if (inventaireCombat2.size() < player.getPlaceInventaire())
+					item.take(playerNumber);
+				}
+				}
+			}
+		}
 	
 	public void doUse(int playerNumber){
 		Player player = ((Player) objects.get(playerNumber));
+		if(playerNumber==0){
 		Item item = ((Item) inventaireCombat.get(0));
 		item.setPosX(player.getPosX());
 		item.setPosY(player.getPosY());
-		item.use();
+		item.use(playerNumber);
 		if (item.getCount() <= 0){
 			inventaireCombat.remove(item);
-		} notifyView();
+		} }
+		else if( playerNumber ==1){
+			Item item = ((Item) inventaireCombat2.get(0));
+			item.setPosX(player.getPosX());
+			item.setPosY(player.getPosY());
+			item.use(playerNumber);
+			if (item.getCount() <= 0){
+				inventaireCombat2.remove(item);
+			}
+		}
 	}
 	
 	public void doDel(int playerNumber){
 		Player player = ((Player) objects.get(playerNumber));
+		if(playerNumber==0){
 		Item item = ((Item) inventaireCombat.get(0));
 		item.setPosX(player.getPosX());
 		item.setPosY(player.getPosY());
-		item.del(objects);
+		item.del(objects,playerNumber);}
+		else{
+			Item item = ((Item) inventaireCombat2.get(0));
+			item.setPosX(player.getPosX());
+			item.setPosY(player.getPosY());
+			item.del(objects, playerNumber);
+		}
+		
+		
 		System.out.println(inventaireCombat.size());
-		notifyView();
+		
 	} 
 	
 	
 	public void addInventaireCombat(Item one){
 		inventaireCombat.add(one);
 	}
+	public void addInventaireCombat2(Item one) {
+		inventaireCombat2.add(one);
+		
+	}
 	
 	public void removeInventaireCombat(Item one){
 		inventaireCombat.remove(one);
+	}
+	public void removeInventaireCombat2(Item one){
+		inventaireCombat2.remove(one);
+	}
+	public ArrayList<GameObject> getInventaireCombat(){
+		return this.inventaireCombat;
 	}
 	
 	public void addObjects(GameObject one){
@@ -346,7 +382,7 @@ public class Game implements Disappear{//implements DemisableObserver{
 		int x = player.getDirectionX();
 		int y = player.getDirectionY();
 		int degats = weapon.getDegats();
-		Animation animation = new Animation(9,x,y,2,this,0,0);
+		Animation animation = new Animation(9,x,y,5,this,0,0);
 		//for (GameObject object : objects){
 		for(int i =0; i <objects.size(); i++ ){
 			GameObject object = objects.get(i);
@@ -374,33 +410,7 @@ public class Game implements Disappear{//implements DemisableObserver{
 	
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
-	public void checkPos (iSlow one){
-		boolean test = false;
-		if (one.getDetonated() == false){
-		for(GameObject object : objects){
-			
-			if(object instanceof Monster){
 
-			boolean distanceX = Math.abs(object.getPosX() - one.getPosX()) == 0;
-			boolean distanceY = Math.abs(object.getPosY() - one.getPosY()) == 0;
-			if(distanceX && distanceY){
-				test = true;
-				//one.setDetonated(true);
-				}}
-		}}
-		
-		else if (one.getDetonated() == true){
-			for(GameObject object : objects){
-
-				boolean distanceX = Math.abs(object.getPosX() - one.getPosX()) == 0;
-				boolean distanceY = Math.abs(object.getPosY() - one.getPosY()) == 0;
-				if(distanceX && distanceY){
-					if(object instanceof Living){
-						one.explodableAttach((ExplodableObserver) object);
-					}
-					}}
-			}
-		one.setDetonated(test);}
 	
 	
 	public void trapTime (Trap trap){
@@ -411,7 +421,7 @@ public class Game implements Disappear{//implements DemisableObserver{
 		for(int i =0; i <objects.size(); i++ ){
 			GameObject object = objects.get(i);
 			if (object instanceof Living){
-				System.out.println(objects.size());
+				
 				if( trap.checkPos(x,y,object)){
 				
 					Living living = (Living) object;
@@ -449,21 +459,11 @@ public class Game implements Disappear{//implements DemisableObserver{
 	}
 	
 		
-	@Override
-	synchronized public void disappear (GameObject gameObject){
-		
-		objects.remove(gameObject);
-		
-	}
+
+
+
+
 	
-	//@Override
-	//synchronized public void demise(Demisable ps, ArrayList<GameObject> loot) {
-		//objects.remove(ps);
-		//if(loot != null){
-			//objects.addAll(loot);
-		//}
-		//notifyView();
-	//}	
 
 }
 	

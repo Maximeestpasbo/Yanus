@@ -2,22 +2,20 @@ package Model;
 import java.util.ArrayList;
 
 import java.awt.Image;
-import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import java.util.Random;
 
 public class mBomber extends Monster {
-	private ArrayList<DemisableObserver> observers = new ArrayList<DemisableObserver>();
 	private static int mVision = 1;
-	private static int x = 1;
-	private static int y = 0;
+
 	private Image image;
 
-	public mBomber(int posX, int posY, Game game,  int lp) {
-		super(posX, posY,x,y, 4, game, mVision, lp);
+	public mBomber(int posX, int posY, Game game,  int lp, int x, int y) {
+		super(posX, posY,x,y, 12, game, mVision, lp);
 		
-        ImageIcon ii = new ImageIcon("images/Bloom.png");
+        ImageIcon ii = new ImageIcon("D:/Users/Maxime/Pictures/Bloom04.png");
         image = ii.getImage();
+
 		
 		
 		Thread t1 = new Thread(this);
@@ -28,10 +26,7 @@ public class mBomber extends Monster {
 	public void run() {
 		Random rand = new Random();
 		int count = 0;
-		int posX = this.posX;
-		int posY = this.posY;
 		int lpTest = this.lp;
-		boolean running = true;
 		while(lpTest > 0){
 			try {
 				synchronized(this){    //////////TODO\\\\\\\\\
@@ -49,41 +44,27 @@ public class mBomber extends Monster {
 				e.printStackTrace();
 			}}
 			 if (rand.nextInt(1) == 0){
-				game.newItem(this);
+				//game.newItem(this);
 			} 
 			//demisableNotifyObserver();
-			game.disappear(this);
+			game.removeObject(this);
 			if(this.getLp() <= 0){
 				boolean test = true;
-				for (GameObject object : game.getGameObjects()){
+				for (int i = 0; i< game.getGameObjects().size(); i++){
+					GameObject object = game.getGameObjects().get(i);
 					if (object instanceof Monster){
 						test = false;
-						System.out.println(object);
+						
 					}
 				}
 				if (test){
-					System.out.println(test);
+					
 					Portal portal = new Portal(game.getSizeX(), game.getSizeY());
 					game.addObjects(portal);
 			}
 			}
 	}
 
-	public BombObject dropBomb(String type){
-		//if(this.maxBomb > 0){
-			//this.maxBomb = this.maxBomb - 1;
-			BombObject bomb = null;
-			if(type.equals("nuke")){
-				bomb = new Nuke(this.posX, this.posY, 3000, 0);
-			}else if(type.equals("bomb")){
-				bomb = new Bomb(this.posX, this.posY, 3000, 1);
-			}
-			bomb.demisableAttach(this);
-			Thread thread = new Thread(bomb);
-			thread.start();
-			return bomb;
-		
-	}
 
 	
 	

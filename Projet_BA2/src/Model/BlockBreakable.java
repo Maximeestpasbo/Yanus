@@ -2,43 +2,27 @@ package Model;
 
 import java.util.ArrayList;
 
-public class BlockBreakable extends Block implements Demisable, ExplodableObserver{
+import java.awt.Image;
+import javax.swing.ImageIcon;
 
-	private ArrayList<DemisableObserver> observers = new ArrayList<DemisableObserver>();
-	
+public class BlockBreakable extends Block {
+
+
+	private Image image;
 	public BlockBreakable(int X, int Y) {
-		super(X, Y, 1);
-	}
-
-	@Override
-	public void exploded(Explodable e) {
-		BombObject bomb = (BombObject) e;
-		boolean distanceX = Math.abs(this.getPosX() - bomb.getPosX()) <= bomb.getRange();
-		boolean distanceY = Math.abs(this.getPosY() - bomb.getPosY()) <= bomb.getRange();
-
-		if(distanceX && distanceY){
-			demisableNotifyObserver();	
-		}
+		super(X, Y, 15);
+		ImageIcon ii = new ImageIcon("D:/Users/Maxime/Pictures/BlockUnbreackable01.png");
+        image = ii.getImage();
 	}
 
 
-	////////////////////////////////////////////////////////////////////////////////////////
-	
-	@Override
-	public void demisableAttach(DemisableObserver po) {
-		observers.add(po);		
-	}
-
-	@Override
-	public void demisableNotifyObserver() {
-		for (DemisableObserver o : observers) {
-			o.demise(this, null);
-		}	
-	}
 
 	@Override
 	public boolean isObstacle() {
 		return true;
+	}
+	public Image getImage() {
+		return this.image;
 	}
 	
 }

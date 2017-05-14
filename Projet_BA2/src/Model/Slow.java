@@ -1,34 +1,41 @@
 package Model;
-
-public class Slow implements Runnable{
-	private int effet;
-	private Living o;
-	private int duree;
-	private int count = 0;
-	
-	public Slow(Living o, int effet, int duree){
-		this.effet = effet;
-		this.duree = duree;
-		this.o = o;
-		Thread thread = new Thread(this);
-		thread.start();
-	}
-	
-	public void run(){
-		int oldTimeTS = o.getTimeTS();
-		o.setTimeTS(effet);
-		while(count < duree){
-			try {
-				Thread.sleep(1000);
-				count += 1;
-				} 
-				
-			 catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		o.setTimeTS(oldTimeTS);
-		}
-	
-
-}
+ 
+ public class Slow implements Runnable{
+ 	private int iteration;
+ 	private int slowTime;
+ 	private Living living;
+ 	private int range; 
+ 	
+ 	public Slow(int itération, int slowTime, Living living, int range){
+ 		this.slowTime = slowTime;
+ 		this.range= range;
+ 		this.iteration = itération;
+ 		this.living = living;
+ 		Thread t1 = new Thread(this);
+ 		t1.start();
+ 	}
+ 	
+ 	@Override
+ 	public void run(){
+ 		int count02 = 0;
+ 		living.setTimeTS(slowTime);
+ 		System.out.println("living TimeTS = " +living.getTimeTS());
+ 		
+ 		while (count02< iteration){
+ 			try{
+ 				Thread.sleep(500);
+ 				count02 = count02+1;
+ 				System.out.println("count02 = " + count02);
+ 				
+ 				
+ 			}
+ 			catch(Exception e){
+ 				
+ 			}
+ 		}
+ 		living.setTimeTS(living.getTrueTimeTS());
+ 		
+ 	}
+ 	
+ 	
+ }

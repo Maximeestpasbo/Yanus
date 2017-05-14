@@ -22,6 +22,7 @@ public class Keyboard implements KeyListener{
 		switch (key){
 			case KeyEvent.VK_RIGHT: 
 				game.movePlayer(1, 0, player1);
+				System.out.println("PosX =" +game.getGameObjects().get(player1).getPosX());
 				break;
 			case KeyEvent.VK_LEFT:
 				game.movePlayer(-1, 0, player1);
@@ -29,6 +30,9 @@ public class Keyboard implements KeyListener{
 			case KeyEvent.VK_DOWN:
 				game.movePlayer(0, 1, player1);
 				break;
+			case KeyEvent.VK_UP:
+				game.movePlayer(0, -1, player1);
+				break;	
 			case KeyEvent.VK_C:
 				game.doTake(player1);
 				break;
@@ -38,17 +42,39 @@ public class Keyboard implements KeyListener{
 			case KeyEvent.VK_D:
 				game.doDel(player1);
 				break;
-			case KeyEvent.VK_UP:
-				game.movePlayer(0, -1, player1);
-				break;	
-			case KeyEvent.VK_SPACE:
-				game.dropBomb("nuke", player1);
-				break;
-			case KeyEvent.VK_B:
-				game.movePlayer(1,0, player2);
+
+
 				
 			case KeyEvent.VK_A:
 				game.useWeapon(player1);
+				break;
+				
+				
+			case KeyEvent.VK_M: 
+				game.movePlayer(1, 0, player2);
+				break;
+			case KeyEvent.VK_K:
+				game.movePlayer(-1, 0, player2);
+				break;
+			case KeyEvent.VK_L:
+				game.movePlayer(0, 1, player2);
+				break;
+			case KeyEvent.VK_O:
+				game.movePlayer(0, -1, player2);
+				break;	
+				
+			case KeyEvent.VK_T:
+				game.useWeapon(player2);
+				break;
+			case KeyEvent.VK_H:
+				game.doTake(player2);
+				break;
+			case KeyEvent.VK_G:
+				game.doUse(player2);
+				break;
+			case KeyEvent.VK_F:
+				game.doDel(player2);
+				break;
 		}
 	}
 

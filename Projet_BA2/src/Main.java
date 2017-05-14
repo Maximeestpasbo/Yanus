@@ -8,6 +8,7 @@ public class Main {
 		Window window = new Window();
 		Viewer viewer = new Viewer(window);
 		
+		
 		Game game = new Game(window);
 		Keyboard keyboard = new Keyboard(game);
 		window.setKeyListener(keyboard);

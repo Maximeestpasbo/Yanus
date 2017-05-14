@@ -1,11 +1,10 @@
 package Model;
 
 public class Hammer extends Weapon  {
-	private int color;
-	private int degat;
-	public Hammer (int degat, int color){
-		super(color,degat);
-		
+	public Hammer (int posX, int posY, int count, Game game, int degats, int color){
+		super(posX,posY, count, game, color, degats);
+ 		this.game = game;
+		this.count = count;
 	}
 	@Override
 	public void damage(Living living, int degats) {

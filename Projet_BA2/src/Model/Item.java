@@ -2,8 +2,7 @@ package Model;
 
 import java.util.ArrayList;
 
-public abstract class Item extends GameObject implements DemisableObserver, ExplodableObserver, Demisable{
-	protected ArrayList<DemisableObserver> observers = new ArrayList<DemisableObserver>();
+public abstract class Item extends GameObject {
 
 	protected int count;
 	protected Game game;
@@ -14,20 +13,31 @@ public abstract class Item extends GameObject implements DemisableObserver, Expl
 		this.game = game;
 	}
 	
-	public void take (){
+	public void take (int playerNumber){
+		if (playerNumber==0){
 		game.addInventaireCombat(this);
+		}
+		else if (playerNumber==1){
+			game.addInventaireCombat2(this);
+		}
 		game.removeObject(this);
+		
 			
 	}
 	
-	public void del (ArrayList objects){
+	public void del (ArrayList objects, int playerNumber){
 		//objects.add(this);                 ///////\\\\\\\\ changer les ajouts de game par ceux de objects et utiliser les get/set
+		if (playerNumber==0){
 		game.removeInventaireCombat(this);
+		}
+		else if (playerNumber==1){
+			game.removeInventaireCombat2(this);
+		}
 		game.addObjects(this);
 	}
 	
 	
-	public void use(){
+	public void use(int playerNumber){
 		game.newItem(this);
 		count -= 1;
 	}
@@ -52,40 +62,6 @@ public boolean isObstacle() {
 return false;
 }	
 
-@Override
-public void demisableAttach(DemisableObserver po) {
-observers.add(po);		
-}
-
-@Override
-public void demisableNotifyObserver() {
-for (DemisableObserver o : observers) {
-o.demise(this, null);
-}	
-}
-
-@Override
-public void exploded(Explodable e) {
-BombObject bomb = (BombObject) e;
-boolean distanceX = Math.abs(this.getPosX() - bomb.getPosX()) <= bomb.getRange();
-boolean distanceY = Math.abs(this.getPosY() - bomb.getPosY()) <= bomb.getRange();
-
-if(distanceX && distanceY){
-//this.count = this.count;
-}
-if(count <= 0){
-demisableNotifyObserver();
-
-
-}
-}
-
-
-@Override
-public void demise(Demisable d, ArrayList<GameObject> loot) {
-//TODO Auto-generated method stub
-
-}
 
 
 
