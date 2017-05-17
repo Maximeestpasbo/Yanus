@@ -12,8 +12,9 @@ public class Dague extends Weapon implements Damage{
 	public Game game;
 	
 	
-	public Dague(int iteration , int degat, Game g, int color){
-		super(iteration, degat);
+	public Dague(int posX, int posY, int iteration , int degat, Game g, int color){
+		super(posX, posY, iteration, g, degat, color);
+		
 		this.degat = degat;
 		this.game= g;
 		this.itération = iteration;

@@ -568,9 +568,23 @@ public class Game implements Disappear{//implements DemisableObserver{
 			}}
 		
 			if(obstacle == false){
-				Item item = new iSlow(x,y,3,this, 10000, 5, 0,200,5);
+				Random rand = new Random();
+				ArrayList allitem = new ArrayList(8);
+				int i = rand.nextInt(allitem.size()-1);
+				
+				
+				if (i==0){Item item = new Potion(x,y,1,this, 7, 10);objects.add(item);}
+				if (i==1){Item item = new TrapSlow(x,y,this, 6, 1, 1000, 0, 0, 1000, 500);objects.add(item);}
+				if (i==2){Item item = new Trap(x,y,this, 1, 7, 1, 1, 1);objects.add(item);}
+				if (i==3){Item item = new Teleporteur(x,y,this, 7);objects.add(item);}
+				if (i==4){Item item = new Hammer(x,y,this, 2, 7, 15);objects.add(item);}
+				if (i==5){Item item = new Fleche(x,y,7, 3, 15, this, 5);objects.add(item);}
+				if (i==6){Item item = new Dague(x,y,5, 2, this, 7);objects.add(item);}
+				if (i==7){Item item = new Potion(x,y,1,this, 7, 10);objects.add(item);}
+				
+				
 				//\\item.demisableAttach(this);
-				objects.add(item);
+				//objects.add(item);
 			} notifyView();
 			
 	}
